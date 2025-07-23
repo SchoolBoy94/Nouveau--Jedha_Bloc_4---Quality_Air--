@@ -1,0 +1,58 @@
+FROM python:3.9-slim
+
+# Lib système pour LightGBM / numpy (OpenBLAS, OpenMP)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libgomp1 && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY app/requirements.txt .
+
+# ➊ ‑ pré‑téléchargement des wheels rapides
+RUN pip install --no-cache-dir --prefer-binary -r requirements.txt
+
+# ➋ ‑ ensuite seulement, copie du code
+COPY app/ .
+
+EXPOSE 8000
+CMD ["uvicorn", "api_aqi_model:app", "--host", "0.0.0.0", "--port", "8000"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # on reste en Python 3.9 pour rester cohérent avec Airflow,
+# # mais vous pourriez passer en 3.11 si vous préférez
+# FROM python:3.9-slim
+
+# # Empêche l’écriture de .pyc et accélère légèrement le démarrage
+# ENV PYTHONDONTWRITEBYTECODE=1 \
+#     PYTHONUNBUFFERED=1 \
+#     PYTHONPATH=/opt/project 
+
+# WORKDIR /app
+
+# # requirements séparés pour le service API
+# COPY app/requirements.txt ./requirements.txt
+# RUN pip install --no-cache-dir -r requirements.txt
+
+# # Librairie métier commune
+# COPY scripts/ /opt/project/scripts
+
+# # code de l’API
+# COPY app/ .
+
+# # lancement du serveur
+# CMD ["uvicorn", "app.predict_service.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

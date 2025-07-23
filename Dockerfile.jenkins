@@ -1,0 +1,13 @@
+FROM jenkins/jenkins:lts
+
+USER root
+
+# Ignorer la validation des dates APT (problème de décalage d'horloge)
+RUN echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99ignore-release-date
+
+# Installer Docker CLI
+RUN apt-get update && \
+    apt-get install -y docker.io && \
+    apt-get clean
+
+USER jenkins
