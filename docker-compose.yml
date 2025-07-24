@@ -7,7 +7,7 @@ services:
     restart: always
     env_file: .env
     environment:
-      POSTGRES_MULTIPLE_DATABASES: airflow,aqi,mlflow
+      POSTGRES_MULTIPLE_DATABASES: ${POSTGRES_MULTIPLE_DATABASES}
     volumes:
       - pg_data:/var/lib/postgresql/data
       - ./init/init-multiple-db.sh:/docker-entrypoint-initdb.d/init-multiple-db.sh
@@ -123,7 +123,7 @@ services:
     restart: always
     env_file: .env
     environment:
-      BACKEND_STORE_URI: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/mlflow
+      BACKEND_STORE_URI: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/mlflow
       ARTIFACT_ROOT: /mlruns
     # depends_on:
     #   postgres:
@@ -134,7 +134,7 @@ services:
       - "5000:5000"
     command: >
       mlflow server
-      --backend-store-uri postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/mlflow
+      --backend-store-uri postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/mlflow
       --default-artifact-root mlflow-artifacts:/
       --serve-artifacts
       --artifacts-destination /mlruns

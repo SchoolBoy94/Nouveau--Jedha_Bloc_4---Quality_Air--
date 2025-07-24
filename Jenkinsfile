@@ -3,9 +3,9 @@ pipeline {
 
     
     /* ▸ Lancement automatique toutes les 48 h */
-    triggers {
-        cron('H H */2 * *')      // ≈ 48 h ; adapte si tu veux une heure fixe
-    }
+    // triggers {
+    //     cron('H H */2 * *')      // ≈ 48 h ; adapte si tu veux une heure fixe
+    // }
 
     
     
@@ -32,7 +32,7 @@ pipeline {
                     try {
                         sh '''
                         docker exec airflow_webserver \
-                          python /opt/airflow/scripts/train_aqi.py
+                          python /opt/airflow/scripts/model/train_aqi.py
                         '''
                     } catch (err) {
                         echo "❌  Échec training : ${err}" 
@@ -50,7 +50,7 @@ pipeline {
                     try {
                         sh '''
                         docker exec airflow_webserver \
-                          python /opt/airflow/scripts/validate_and_promote_aqi.py
+                          python /opt/airflow/scripts/model/validate_and_promote_aqi.py
                         '''
                     } catch (err) {
                         echo "❌  Échec validation/promotion : ${err}"

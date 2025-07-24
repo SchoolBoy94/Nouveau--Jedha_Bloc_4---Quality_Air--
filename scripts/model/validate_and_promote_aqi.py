@@ -16,8 +16,9 @@ import mlflow
 from mlflow.tracking import MlflowClient
 
 # ---------------------- Configuration --------------------------------------
-CSV_PATH       = Path(os.getenv("AQI_CSV_PATH",
-                          Path(__file__).parent / "aqi_2024.csv"))
+# CSV_PATH       = Path(os.getenv("AQI_CSV_PATH",
+#                           Path(__file__).parent / "aqi_2024.csv"))
+CSV_PATH = Path(__file__).parent.parent / "etl" / "aqi_all.csv"
 MLFLOW_URI      = os.getenv("MLFLOW_TRACKING_URI", "http://mlflow:5000")
 EXPERIMENT_NAME = os.getenv("MLFLOW_EXPERIMENT",  "aqi_prediction")
 TARGET          = "european_aqi"
@@ -32,8 +33,10 @@ def _load_and_clean_csv(path: Path) -> pd.DataFrame:
     if not path.exists():
         sys.exit(f"❌  Dataset introuvable : {path}")
 
-    df = pd.read_csv(path, skiprows=2)
-    df.columns = [re.sub(r"\s*\(.*?\)", "", c).strip().lower() for c in df.columns]
+    # df = pd.read_csv(path, skiprows=2)
+    # df.columns = [re.sub(r"\s*\(.*?\)", "", c).strip().lower() for c in df.columns]
+    
+    df = pd.read_csv(path)
     df["time"] = pd.to_datetime(df["time"], utc=True, errors="coerce")
     return df
 

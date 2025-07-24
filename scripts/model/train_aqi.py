@@ -25,7 +25,11 @@ from lightgbm import LGBMRegressor
 import mlflow, mlflow.sklearn
 from mlflow.tracking import MlflowClient
 from pathlib import Path
-csv_path = Path(__file__).parent / "aqi_2024.csv"
+# csv_path = Path(__file__).parent / "aqi_2024.csv"
+
+# Aller deux dossiers au-dessus, puis vers 'etl'
+csv_path = Path(__file__).parent.parent / "etl" / "aqi_2024.csv"
+
 
 MLFLOW_URI      = os.getenv("MLFLOW_TRACKING_URI", "http://mlflow:5000")
 EXPERIMENT_NAME = os.getenv("MLFLOW_EXPERIMENT",    "aqi_prediction")
