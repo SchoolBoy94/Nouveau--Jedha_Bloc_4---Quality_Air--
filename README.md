@@ -1,4 +1,4 @@
-# Pipeline de Prévision et de Surveillance des Transactions frauduleuses
+# Projet MLOps : Prédiction Qualité de l'air
 
 Prédire l’**Transactions frauduleuses**
 
